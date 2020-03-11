@@ -72,7 +72,7 @@ def wrap_command_with_sbatch(
         full_cmd = (
             "sbatch -A {account_name} -p {partition} -t {time}"
             " -N {nodes} -n {n_tasks} --cpus-per-task={cpus_per_task}"
-            " --wrap=$'{cmd}'".format(
+            " {extra_flags} --wrap=$'{cmd}'".format(
                 account_name=config.account_name,
                 partition=config.partition,
                 time=config.time_in_mins,
@@ -80,6 +80,7 @@ def wrap_command_with_sbatch(
                 n_tasks=n_tasks,
                 cpus_per_task=config.n_cpus_per_task,
                 cmd=cmd,
+                extra_flags=config.extra_flags,
             )
         )
     return full_cmd
