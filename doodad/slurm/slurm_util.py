@@ -20,6 +20,7 @@ class SlurmConfig(object):
             n_gpus=0,
             n_cpus_per_task=1,
             n_nodes=None,
+            extra_flags="",
     ):
         if n_gpus > 0 and n_cpus_per_task < 2:
             raise ValueError("Must have at least 2 cpus per GPU task")
@@ -30,6 +31,7 @@ class SlurmConfig(object):
         self.n_gpus = n_gpus
         self.n_cpus_per_task = n_cpus_per_task
         self.max_num_cores_per_node = max_num_cores_per_node
+        self.extra_flags = extra_flags
 
 
 def wrap_command_with_sbatch(
@@ -54,7 +56,7 @@ def wrap_command_with_sbatch(
         full_cmd = (
             "sbatch -A {account_name} -p {partition} -t {time}"
             " -N {nodes} -n {n_tasks} --cpus-per-task={cpus_per_task}"
-            " --gres=gpu:{n_gpus} --wrap=$'{cmd}'".format(
+            " --gres=gpu:{n_gpus} {extra_flags} --wrap=$'{cmd}'".format(
                 account_name=config.account_name,
                 partition=config.partition,
                 time=config.time_in_mins,
@@ -63,6 +65,7 @@ def wrap_command_with_sbatch(
                 cpus_per_task=config.n_cpus_per_task,
                 cmd=cmd,
                 n_gpus=config.n_gpus,
+                extra_flags=config.extra_flags,
             )
         )
     else:
