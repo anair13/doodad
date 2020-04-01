@@ -89,6 +89,8 @@ def run_experiment(
         ssh_host=None,
         # gcp
         gcp_kwargs=None,
+        s3_log_prefix=None,
+        s3_log_name="",
 ):
     """
     Usage:
@@ -307,16 +309,18 @@ def run_experiment(
             )
     elif mode == 'ec2':
         # Do this separately in case someone does not have EC2 configured
+        if s3_log_prefix is None:
+            s3_log_prefix = exp_name
         dmode = doodad.mode.EC2AutoconfigDocker(
             image=docker_image,
             image_id=image_id,
             region=region,
             instance_type=instance_type,
             spot_price=spot_price,
-            s3_log_prefix=exp_name,
+            s3_log_prefix=s3_log_prefix,
             # Make the sub-directories within launching code rather
             # than relying on doodad.
-            s3_log_name="",
+            s3_log_name=s3_log_name,
             gpu=use_gpu,
             aws_s3_path=aws_s3_path,
             num_exps=num_exps_per_instance,
