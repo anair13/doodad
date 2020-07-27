@@ -1043,8 +1043,10 @@ class ScriptSlurmSingularity(SlurmSingularity):
             image,
             slurm_config,
             overwrite_script=False,
+            exp_name="",
             **kwargs
     ):
+        self.exp_name = exp_name
         super().__init__(image, slurm_config, **kwargs)
         self._overwrite_script = overwrite_script
 
@@ -1054,6 +1056,7 @@ class ScriptSlurmSingularity(SlurmSingularity):
             dry=False,
             mount_points=None,
             verbose=True,
+            exp_name="",
     ):
         full_cmd = self.create_slurm_command(cmd, mount_points=mount_points)
         # full_cmd = self.create_singularity_cmd(cmd, mount_points=mount_points)
@@ -1062,4 +1065,10 @@ class ScriptSlurmSingularity(SlurmSingularity):
             path=self.TMP_FILE,
             verbose=True,
             overwrite=self._overwrite_script,
+        )
+        utils.add_to_script(
+            "# " + self.exp_name,
+            path=self.TMP_FILE,
+            verbose=True,
+            overwrite=False,
         )

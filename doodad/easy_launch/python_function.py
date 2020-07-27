@@ -306,6 +306,7 @@ def run_experiment(
                 extra_args=config.BRC_EXTRA_SINGULARITY_ARGS,
                 slurm_config=slurm_config,
                 overwrite_script=_global_is_first_launch,
+                exp_name="%s/run%s" % (exp_name, str(variant.get("run_id", ""))),
             )
     elif mode == 'ec2':
         # Do this separately in case someone does not have EC2 configured
