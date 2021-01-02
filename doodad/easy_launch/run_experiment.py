@@ -1,16 +1,19 @@
 import doodad as dd
+import os
+import shutil
 
 if __name__ == "__main__":
+    if os.path.exists("/root/.mujoco/mjkey.txt"):
+        shutil.copyfile("/home/ashvin/code/mujoco/mjkey.txt", "/root/.mujoco/mjkey.txt")
     import matplotlib
     matplotlib.use('agg')
-
     args_dict = dd.get_args()
     method_call = args_dict['method_call']
     doodad_config = args_dict['doodad_config']
     variant = args_dict['variant']
     output_dir = args_dict['output_dir']
     run_mode = args_dict.get('mode', None)
-    if run_mode and run_mode in ['slurm_singularity', 'sss', 'htp']:
+    if run_mode and run_mode in ['slurm_singularity', 'sss']:
         import os
         doodad_config.extra_launch_info['slurm-job-id'] = os.environ.get(
             'SLURM_JOB_ID', None
