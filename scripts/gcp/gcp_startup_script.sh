@@ -38,11 +38,11 @@ query_metadata() {
     echo "terminate:" $terminate
     echo "instance_name:" $instance_name
 
-    sudo apt-get update
+    # sudo apt-get update
     #install_docker
-    while sudo fuser /var/{lib/{dpkg,apt/lists},cache/apt/archives}/lock >/dev/null 2>&1; do
-        sleep 1
-    done
+    # while sudo fuser /var/{lib/{dpkg,apt/lists},cache/apt/archives}/lock >/dev/null 2>&1; do
+    #     sleep 1
+    # done
     sudo apt-get install -y jq git unzip
     die() { status=$1; shift; echo "FATAL: $*"; exit $status; }
     service docker start
